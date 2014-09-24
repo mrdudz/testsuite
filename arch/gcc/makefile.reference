@@ -1,0 +1,29 @@
+##############################################################################################
+# compiler testsuite - makefile for gcc (reference)
+##############################################################################################
+
+CC=gcc
+RM=rm -f
+
+CCFLAGS=-O2 -D$(TARGETSTDDEF) -I ./arch/$(TARGET) -I ./arch/$(REFCC) -I ./util -I . -DLINUX -DREFERENCE -Wall -W
+HOSTSUFFIX=
+
+##############################################################################################
+
+#.SILENT:
+
+%: %.c
+	@echo "[HOSTCC]" $<
+	-@$(RM) $*.warnref
+	-@$(RM) $*$(HOSTSUFFIX)
+	-@$(RM) ./bin/$(@F)$(HOSTSUFFIX)
+	-@LANGUAGE="en" $(CC) -o $*$(HOSTSUFFIX) $(CCFLAGS) $< 1>> $*.warnref 2>> $*.warnref
+#	-@cat $*.warnref
+	-@mv $*.warnref ./temp/
+	-@mv $*$(HOSTSUFFIX) ./bin/
+
+clean:
+	@for i in $(TESTS) ; do \
+		$(RM) $$i.o; \
+		$(RM) $$i.warnref; \
+	done
