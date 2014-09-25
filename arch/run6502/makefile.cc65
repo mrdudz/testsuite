@@ -35,8 +35,6 @@ STDLIBS=run6502.lib
 
 ##############################################################################################
 
-#.SILENT:
-#			echo -n " cc:("$(TARGETSTD):$(CCFLAGS)")"; \
 
 %: %.c
 		-@echo -n "$< ..."; \
@@ -84,27 +82,7 @@ STDLIBS=run6502.lib
         \
 		mv $*.errors ./temp/
 
-#			pucrunch -fshort -c64 $$i.prg $$i.prg 1> /dev/null 2> /dev/null; \
-
 disc:
-
-#	@$(C1541) -format testdisc,00 d81 ./tbin/testsuite.d81 1> /dev/null 2> /dev/null
-#	@for i in $(TESTS) ; do \
-#			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-#			if test -e ./tbin/$$THISTEST; then \
-#			    $(C1541) -attach ./tbin/testsuite.d81 -write ./tbin/$$THISTEST.prg $$THISTEST 1> /dev/null 2> /dev/null; \
-#			fi; \
-#	done
-#	@for i in $(TESTS) ; do \
-#			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-#			if test -e $$i.input; then \
-#				cat $$i.input | $(CBMCVT) > ./tbin/$$THISTEST.in; \
-#			fi; \
-#			if test -e ./tbin/$$THISTEST.in; then \
-#			    $(C1541) -attach ./tbin/testsuite.d81 -write ./tbin/$$THISTEST.in $$THISTEST.in,u 1> /dev/null 2> /dev/null; \
-#			fi; \
-#	done
-
 	@for i in $(TESTS) ; do \
 			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
 			if test -e $$i.input; then \
@@ -114,20 +92,10 @@ disc:
 
 run:
 
-#		@x64 +pal +sound -truedrive -virtualdev -warp -drive8type 1581 -8 ./bin/testsuite.d81 -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#            1> /dev/null 2> /dev/null
-
-#		x64 -default +confirmexit -refresh 10 +VICIIdsize +VICIIdscan +VICIIscale2x +newluminance +sound +sidfilters -sidengine 0 +truedrive -virtualdev -warp -drive8type 1581 -autostart ./tbin/testsuite.d81 -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#           1> /dev/null 2> /dev/null
-
-#		cd ./tbin/; x64 -default +confirmexit -refresh 10 +VICIIdsize +VICIIdscan +VICIIscale2x +newluminance +sound +sidfilters -sidengine 0 +truedrive -virtualdev -warp -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#            1> /dev/null 2> /dev/null
-
-#	dd bs=1 skip=26 if=./tbin/` echo $$THISTEST | tr "[a-z]" "[A-Z]" `OUT.U00 of=./tbin/$$THISTEST.out ;  \
-
+	@echo "using $(RUN6502):"
 	@for i in $(TESTS) ; do \
 		export THISTEST=`echo "$$i" | sed -e 's/.*\///'` ;\
-		echo -n "$$THISTEST," ;\
+		echo -n "$$THISTEST" ;\
 		rm -f ./tbin/$$THISTEST.out ;\
 		if test -e ./tbin/$$THISTEST; then \
 			if test -e ./tbin/$$THISTEST.in; then \
@@ -142,7 +110,7 @@ run:
 
 
 extract:
-		$(CC) --version 2> ./temp/targetcc.version
+		@$(CC) --version 2> ./temp/targetcc.version
 		@for i in $(TESTS) ; do \
 			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
 			echo -n "$$THISTEST,"; \

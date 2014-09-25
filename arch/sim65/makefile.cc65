@@ -31,9 +31,6 @@ STDLIBS=sim6502.lib
 
 ##############################################################################################
 
-#.SILENT:
-#			echo -n " cc:("$(TARGETSTD):$(CCFLAGS)")"; \
-
 %: %.c
 		-@echo -n "$< ..."; \
 		$(RM) $*.errors; \
@@ -80,79 +77,46 @@ STDLIBS=sim6502.lib
         \
 		mv $*.errors ./temp/
 
-#			pucrunch -fshort -c64 $$i.prg $$i.prg 1> /dev/null 2> /dev/null; \
-
 disc:
 
-#	@$(C1541) -format testdisc,00 d81 ./tbin/testsuite.d81 1> /dev/null 2> /dev/null
-#	@for i in $(TESTS) ; do \
-#			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-#			if test -e ./tbin/$$THISTEST; then \
-#			    $(C1541) -attach ./tbin/testsuite.d81 -write ./tbin/$$THISTEST.prg $$THISTEST 1> /dev/null 2> /dev/null; \
-#			fi; \
-#	done
-#	@for i in $(TESTS) ; do \
-#			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-#			if test -e $$i.input; then \
-#				cat $$i.input | $(CBMCVT) > ./tbin/$$THISTEST.in; \
-#			fi; \
-#			if test -e ./tbin/$$THISTEST.in; then \
-#			    $(C1541) -attach ./tbin/testsuite.d81 -write ./tbin/$$THISTEST.in $$THISTEST.in,u 1> /dev/null 2> /dev/null; \
-#			fi; \
-#	done
-
 	@for i in $(TESTS) ; do \
-			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-			if test -e $$i.input; then \
-				cat $$i.input > ./tbin/$$THISTEST.in; \
-			fi; \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
+		if test -e $$i.input; then \
+			cat $$i.input > ./tbin/$$THISTEST.in; \
+		fi; \
 	done
 
 run:
 
-#		@x64 +pal +sound -truedrive -virtualdev -warp -drive8type 1581 -8 ./bin/testsuite.d81 -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#            1> /dev/null 2> /dev/null
-
-#		x64 -default +confirmexit -refresh 10 +VICIIdsize +VICIIdscan +VICIIscale2x +newluminance +sound +sidfilters -sidengine 0 +truedrive -virtualdev -warp -drive8type 1581 -autostart ./tbin/testsuite.d81 -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#           1> /dev/null 2> /dev/null
-
-#		cd ./tbin/; x64 -default +confirmexit -refresh 10 +VICIIdsize +VICIIdscan +VICIIscale2x +newluminance +sound +sidfilters -sidengine 0 +truedrive -virtualdev -warp -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#            1> /dev/null 2> /dev/null
-
-#	dd bs=1 skip=26 if=./tbin/` echo $$THISTEST | tr "[a-z]" "[A-Z]" `OUT.U00 of=./tbin/$$THISTEST.out ;  \
-
+	@echo "using $(RUN6502):"
 	@for i in $(TESTS) ; do \
 		export THISTEST=`echo "$$i" | sed -e 's/.*\///'` ;\
 		echo -n "$$THISTEST," ;\
 		rm -f ./tbin/$$THISTEST.out ;\
 		if test -e ./tbin/$$THISTEST; then \
 			if test -e ./tbin/$$THISTEST.in; then \
-				$(RUN6502) \
+				$(RUN6502) -x 199999999 \
 				./tbin/$$THISTEST < ./tbin/$$THISTEST.in > ./tbin/$$THISTEST.out ; \
 			else \
-				$(RUN6502) \
+				$(RUN6502) -x 199999999 \
 				./tbin/$$THISTEST > ./tbin/$$THISTEST.out ; \
 			fi;\
 		fi;\
 	done
 
-
 extract:
-		$(CC) --version 2> ./temp/targetcc.version
-		@for i in $(TESTS) ; do \
-			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-			echo -n "$$THISTEST,"; \
-			rm -f ./temp/$$THISTEST.result; \
-			if test -e ./tbin/$$THISTEST.out; then \
-				cat ./tbin/$$THISTEST.out > ./temp/$$THISTEST.result; \
-			fi;\
-		done
-
-
-#				cat ./bin/$$THISTEST.out | $(CBMCVT) -f > ./temp/$$THISTEST.result; \
+	@$(CC) --version 2> ./temp/targetcc.version
+	@for i in $(TESTS) ; do \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
+		echo -n "$$THISTEST,"; \
+		rm -f ./temp/$$THISTEST.result; \
+		if test -e ./tbin/$$THISTEST.out; then \
+			cat ./tbin/$$THISTEST.out > ./temp/$$THISTEST.result; \
+		fi;\
+	done
 
 clean:
-		@for i in $(TESTS) ; do \
-			$(RM) $$i.o; \
-			$(RM) $$i.s; \
-		done
+	@for i in $(TESTS) ; do \
+		$(RM) $$i.o; \
+		$(RM) $$i.s; \
+	done

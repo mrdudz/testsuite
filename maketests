@@ -79,74 +79,74 @@ function details
 
 function makereference
 {
-	echo creating reference binaries.
+    echo creating reference binaries.
 
-	for i in $TESTS ; do \
-                THISTEST=`echo "$i" | sed -e 's/.*\///'`; \
-                rm -f $i ; \
-	done
-	
-	make -f ./arch/$REFCC/makefile.reference $TESTS
+    for i in $TESTS ; do \
+            THISTEST=`echo "$i" | sed -e 's/.*\///'`; \
+            rm -f $i ; \
+    done
 
-	echo done.
+    make --no-print-directory -f ./arch/$REFCC/makefile.reference $TESTS
 
-	echo creating reference input
+    echo done.
 
-	for i in $TESTS ; do \
-                echo -n "$i..."; \
-                THISTEST=`echo "$i" | sed -e 's/.*\///'`; \
-					if test -e $i.input; then \
-                        cat $i.input > ./bin/$THISTEST.in; \
-                        cat $i.input > ./tbin/$THISTEST.in; \
-                        echo "ok"; \
-                    else \
-                        echo "none"; \
-                    fi; \
-		    done
+    echo creating reference input
 
-			echo done.
+    for i in $TESTS ; do \
+        echo -n "$i..."; \
+        THISTEST=`echo "$i" | sed -e 's/.*\///'`; \
+        if test -e $i.input; then \
+            cat $i.input > ./bin/$THISTEST.in; \
+            cat $i.input > ./tbin/$THISTEST.in; \
+            echo "ok"; \
+        else \
+            echo "none"; \
+        fi; \
+    done
 
-			echo running tests and creating reference output.
+    echo done.
 
-            for i in $TESTS ; do \
-                THISTEST=`echo "$i" | sed -e 's/.*\///'`; \
-                echo -n "$i..." ;\
-                    rm -f ./bin/$THISTEST.out ./temp/$THISTEST.ref; \
-                if test -f ./bin/$THISTEST; then \
-                    cd ./bin;"./$THISTEST";cd ..; \
-                    if test -s ./bin/$THISTEST.out; then \
-                        cat ./bin/$THISTEST.out > ./temp/$THISTEST.ref; \
-                        rm -f ./bin/$THISTEST.out; \
-                    fi;\
-                    echo "ok"; \
-                else \
-                    echo "error"; \
-                fi;\
-            done
+    echo running tests and creating reference output.
 
-            echo done.
+    for i in $TESTS ; do \
+        THISTEST=`echo "$i" | sed -e 's/.*\///'`; \
+        echo -n "$i..." ;\
+            rm -f ./bin/$THISTEST.out ./temp/$THISTEST.ref; \
+        if test -f ./bin/$THISTEST; then \
+            cd ./bin;"./$THISTEST";cd ..; \
+            if test -s ./bin/$THISTEST.out; then \
+                cat ./bin/$THISTEST.out > ./temp/$THISTEST.ref; \
+                rm -f ./bin/$THISTEST.out; \
+            fi;\
+            echo "ok"; \
+        else \
+            echo "error"; \
+        fi;\
+    done
+
+    echo done.
 }
 
 function maketarget
 {
 
-            echo -ne "\n\nbuilding target binaries.\n"
-			make -f ./arch/$TARGET/makefile.$TARGETCC $TESTS
-            echo -ne "\n\nbuilding target image.\n"
-			make -f ./arch/$TARGET/makefile.$TARGETCC disc
+    echo -ne "\n\nbuilding target binaries.\n"
+    make --no-print-directory -f ./arch/$TARGET/makefile.$TARGETCC $TESTS
+    echo -ne "\n\nbuilding target image.\n"
+    make --no-print-directory -f ./arch/$TARGET/makefile.$TARGETCC disc
 
 }
 
 function runtarget
 {
-		echo starting emulator...close emulator when tests are finished.
-			make -f ./arch/$TARGET/makefile.$TARGETCC run
+    echo starting emulator "'"$TARGET"'"... close emulator when tests are finished.
+    make --no-print-directory -f ./arch/$TARGET/makefile.$TARGETCC run
 }
 
 function makereport
 {
     echo -ne "\n\nextracting results.\n"
-    make -f arch/$TARGET/makefile.$TARGETCC extract
+    make --no-print-directory -f arch/$TARGET/makefile.$TARGETCC extract
     echo -e "done."
 
     echo -ne "\n\ncreating report.\n"
@@ -176,13 +176,13 @@ function cleanup
 {
     rm -f $BINDIR/*
     rm -f $HTMLDIR/*
-	rm -f $TEMPDIR/*
-	rm -f $OUTFILE
+    rm -f $TEMPDIR/*
+    rm -f $OUTFILE
     rmdir --ignore-fail-on-non-empty $BINDIR
     rmdir --ignore-fail-on-non-empty $HTMLDIR
     rmdir --ignore-fail-on-non-empty $TEMPDIR
-	make -f ./arch/$REFCC/makefile.reference clean
-	make -f ./arch/$TARGET/makefile.$TARGETCC clean
+    make --no-print-directory -f ./arch/$REFCC/makefile.reference clean
+    make --no-print-directory -f ./arch/$TARGET/makefile.$TARGETCC clean
 }
 
 function setstandard
@@ -190,20 +190,20 @@ function setstandard
     echo setting standard: $1
     case $1 in
         ("c89")
-	export TARGETSTD=c89
-	export TARGETSTDDEF=STANDARD_C89
-           ;;
-       ("c99")
-	export TARGETSTD=c99
-	export TARGETSTDDEF=STANDARD_C99
-           ;;
-       ("cc65")
-	export TARGETSTD=cc65
-	export TARGETSTDDEF=STANDARD_CC65
-           ;;
-   esac
+        export TARGETSTD=c89
+        export TARGETSTDDEF=STANDARD_C89
+            ;;
+        ("c99")
+        export TARGETSTD=c99
+        export TARGETSTDDEF=STANDARD_C99
+            ;;
+        ("cc65")
+        export TARGETSTD=cc65
+        export TARGETSTDDEF=STANDARD_CC65
+            ;;
+    esac
 
-   export OUTFILE=report-$TARGETSTD-o$TARGETOPTS.html
+    export OUTFILE=report-$TARGETSTD-o$TARGETOPTS.html
 
     echo TARGETSTD:    $TARGETSTD
     echo TARGETSTDDEF: $TARGETSTDDEF
@@ -218,21 +218,21 @@ function settarget
     echo setting target: $1
     case $1 in
         ("c64")
-	export TARGET=c64
-	export TARGETDEF=TARGET_C64
-	setstandard cc65
-           ;;
-       ("run6502")
+        export TARGET=c64
+        export TARGETDEF=TARGET_C64
+        setstandard cc65
+            ;;
+        ("run6502")
         export TARGET=run6502
         export TARGETDEF=TARGET_RUN6502
         setstandard c99
-           ;;
-       ("sim65")
+            ;;
+        ("sim65")
         export TARGET=sim65
         export TARGETDEF=TARGET_SIM65
         setstandard c99
-           ;;
-   esac
+            ;;
+    esac
 
     echo TARGET:    $TARGET
     echo TARGETDEF: $TARGETDEF
@@ -379,5 +379,11 @@ done
 ################################################################################
 # EOF
 ################################################################################
+
+# print a CR when we are not at the end of the line
+echo -en "\E[6n" && read -sdR CURPOS && CURPOS=${CURPOS#*[*;}
+if test $CURPOS != 1; then
+    echo -ne "\n"
+fi
 
 exit 0 ;

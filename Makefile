@@ -36,11 +36,11 @@ std: attribs
 	@./maketests --target $(TARGET) --show-config --overview
 
 one: attribs
-	@./maketests --target $(TARGET)  --standard cc65 --show-config --reference
+	@./maketests --target $(TARGET) --standard cc65 --show-config --reference
 
 	@./maketests --target $(TARGET) --standard cc65 --show-config --targetprogs --run --report
 
-	@./maketests --target $(TARGET)  --show-config --overview
+	@./maketests --target $(TARGET) --show-config --overview
 
 opt: attribs
 	@./maketests --target $(TARGET) --standard cc65 --show-config --reference

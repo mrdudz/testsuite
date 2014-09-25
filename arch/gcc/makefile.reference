@@ -18,9 +18,12 @@ HOSTSUFFIX=
 	-@$(RM) $*$(HOSTSUFFIX)
 	-@$(RM) ./bin/$(@F)$(HOSTSUFFIX)
 	-@LANGUAGE="en" $(CC) -o $*$(HOSTSUFFIX) $(CCFLAGS) $< 1>> $*.warnref 2>> $*.warnref
-#	-@cat $*.warnref
-	-@mv $*.warnref ./temp/
-	-@mv $*$(HOSTSUFFIX) ./bin/
+	-@if test -e $*.warnref; then \
+		mv $*.warnref ./temp/; \
+	  fi
+	-@if test -e $*$(HOSTSUFFIX); then \
+		mv $*$(HOSTSUFFIX) ./bin/; \
+	  fi
 
 clean:
 	@for i in $(TESTS) ; do \
