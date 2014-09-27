@@ -2,16 +2,9 @@
 # compiler testsuite - makefile for cc65 (target)
 ##############################################################################################
 
-DEVPREFIX=~/Desktop/cc65/github/cc65/bin
-CC=$(DEVPREFIX)/cc65
-AS=$(DEVPREFIX)/ca65
-LD=$(DEVPREFIX)/ld65
+include arch/cc65/makefile.targetcfg
 
 #CBMCVT=$(DEVPREFIX)/util/cbm/cbmcvt
-
-#CC=cc65
-#AS=ca65
-#LD=ld65
 
 CBMCVT=cbmcvt
 #PET2ASC=petcat -nh
@@ -23,12 +16,13 @@ RM=rm -f
 
 #OPTS=-Osir
 
-#CCFLAGS=--standard $(TARGETSTD) -D $(TARGETSTDDEF) -T -t c64 -Osir -I . -I ./arch/$(TARGET) -I ./arch/$(REFCC) -I ./util
-CCFLAGS=--standard $(TARGETSTD) -D $(TARGETSTDDEF) -D $(TARGETDEF) -T -t c64 $(TARGETOPTS) -I . -I ./arch/  -I ./tests/ -I ./arch/$(TARGET) -I ./arch/$(REFCC) -I ./util
-ASFLAGS=-t c64
-LDFLAGS=-t c64
-#START=c64.o
-STDLIBS=c64.lib
+CCFLAGS+=-D $(TARGETSTDDEF) -D $(TARGETDEF) -T -t c64 $(TARGETOPTS) -I . -I ./arch/  -I ./tests/ -I ./arch/$(TARGET) -I ./arch/$(REFCC) -I ./util
+ASFLAGS+=-t c64
+LDFLAGS+=-t c64
+ifdef CRT0PATH
+START=$(CRT0PATH)c64.o
+endif
+STDLIBS=$(TARGETLIBPATH)/c64.lib
 
 ##############################################################################################
 
@@ -81,26 +75,7 @@ STDLIBS=c64.lib
         \
 		mv $*.errors ./temp/
 
-#			pucrunch -fshort -c64 $$i.prg $$i.prg 1> /dev/null 2> /dev/null; \
-
 disc:
-
-#	@$(C1541) -format testdisc,00 d81 ./tbin/testsuite.d81 1> /dev/null 2> /dev/null
-#	@for i in $(TESTS) ; do \
-#			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-#			if test -e ./tbin/$$THISTEST; then \
-#			    $(C1541) -attach ./tbin/testsuite.d81 -write ./tbin/$$THISTEST.prg $$THISTEST 1> /dev/null 2> /dev/null; \
-#			fi; \
-#	done
-#	@for i in $(TESTS) ; do \
-#			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-#			if test -e $$i.input; then \
-#				cat $$i.input | $(CBMCVT) > ./tbin/$$THISTEST.in; \
-#			fi; \
-#			if test -e ./tbin/$$THISTEST.in; then \
-#			    $(C1541) -attach ./tbin/testsuite.d81 -write ./tbin/$$THISTEST.in $$THISTEST.in,u 1> /dev/null 2> /dev/null; \
-#			fi; \
-#	done
 
 	@for i in $(TESTS) ; do \
 			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
@@ -112,24 +87,16 @@ disc:
 
 run:
 
-#		@x64 +pal +sound -truedrive -virtualdev -warp -drive8type 1581 -8 ./bin/testsuite.d81 -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#            1> /dev/null 2> /dev/null
 
-#		x64 -default +confirmexit -refresh 10 +VICIIdsize +VICIIdscan +VICIIscale2x +newluminance +sound +sidfilters -sidengine 0 +truedrive -virtualdev -warp -drive8type 1581 -autostart ./tbin/testsuite.d81 -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#           1> /dev/null 2> /dev/null
+	@rm -f ./tbin/*.out
 
-	rm -f ./tbin/*.out
 
-#	cd ./tbin/; x64 -default +confirmexit -refresh 10 +VICIIdsize +VICIIdscan +VICIIscale2x +newluminance +sound +sidfilters -sidengine 0 +truedrive -virtualdev -warp -keybuf "Lo\\22:*\\22,8,1\\0dRu\\0d" \
-#            1> /dev/null 2> /dev/null
+	@cd ./tbin/; x64 -default -jamaction 5 -autostartprgmode 0 +confirmexit -refresh 10 +VICIIdsize +VICIIdscan -VICIIfilter 0 +sound +sidfilters -sidengine 0 -warp +autostart-handle-tde 8q \
+		1> /dev/null 2> /dev/null
 
-	cd ./tbin/; x64 -default -jamaction 5 -autostartprgmode 0 +confirmexit -refresh 10 +VICIIdsize +VICIIdscan -VICIIfilter 0 +sound +sidfilters -sidengine 0 -warp +autostart-handle-tde 8q \
-            1> /dev/null 2> /dev/null
-
-#	dd bs=1 skip=26 if=./tbin/` echo $$THISTEST | tr "[a-z]" "[A-Z]" `OUT.U00 of=./tbin/$$THISTEST.out ;  \
 
 extract:
-		$(CC) --version 2> ./temp/targetcc.version
+		@-$(CC) --version 2>&1 | grep -v "No input files" > ./temp/targetcc.version
 		@for i in $(TESTS) ; do \
 			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
 			echo -n "$$THISTEST,"; \
@@ -139,8 +106,6 @@ extract:
 			fi;\
 		done
 
-
-#				cat ./bin/$$THISTEST.out | $(CBMCVT) -f > ./temp/$$THISTEST.result; \
 
 clean:
 		@for i in $(TESTS) ; do \

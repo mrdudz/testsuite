@@ -165,7 +165,8 @@ void closetest(char *name)
 		printf("all tests done.\n\r");
 		closedir(mydir);
                 *((char*)2)=2;
-                asm("jmp 2");
+                ((void(*)())0x0002)();;
+//                asm("jmp $0002");     /* this doesnt work with older compilers ^_^ */
 	}
 #else
 	name=name;
