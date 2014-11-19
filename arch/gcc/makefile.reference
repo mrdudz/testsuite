@@ -5,7 +5,8 @@
 CC=gcc
 RM=rm -f
 
-CCFLAGS=-O2 -D$(TARGETSTDDEF) -I ./arch/$(TARGET) -I ./arch/$(REFCC) -I ./util -I . -DLINUX -DREFERENCE -Wall -W
+CCFLAGS=-O2 -Wall -W -Wextra -fwrapv -fno-strict-overflow
+CCFLAGS+=-D$(TARGETSTDDEF) -I ./arch/$(TARGET) -I ./arch/$(REFCC) -I ./util -I . -DLINUX -DREFERENCE
 HOSTSUFFIX=
 
 ##############################################################################################

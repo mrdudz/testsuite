@@ -1,8 +1,8 @@
 
-#TARGET=sim65
+TARGET=sim65
 #TARGET=run6502
 # this will use VICE
-TARGET=c64
+#TARGET=c64
 
 #.SILENT:
 

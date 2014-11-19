@@ -158,6 +158,21 @@ void addcompoundint(void)
     done("addcompoundint");
 }
 
+/*
+  CAUTION: the wraparound behaviour is actually undefined, to get the "expected"
+           behaviour with GCC, use -fwrapv or -fno-strict-overflow
+
+  see: https://gcc.gnu.org/wiki/FAQ#signed_overflow
+*/
+void printlong0(void)
+{
+#if defined(REFERENCE) && defined(REFCC_SIZEOF_LONG_64BIT)
+    fprintf(outfile,"long0: %d\n", long0);
+#else
+    fprintf(outfile,"long0: %ld\n", long0);
+#endif
+}
+
 void addlit2long(void)
 {
 
@@ -192,13 +207,13 @@ void addlit2long(void)
     failures|=0x0040;
 
   /* wrap around zero */
-  fprintf(outfile,"long0: %ld\n", long0);
+  printlong0();
   long0 = long0 + 0x2000000;
-  fprintf(outfile,"long0: %ld\n", long0);
+  printlong0();
   if(long0 != -0x7f000000)
     failures|=0x0080;
 
-  fprintf(outfile,"long0: %ld\n", long0);
+  printlong0();
 
   long0 = long0 + 0x7f000000;
   if(long0 != 0)

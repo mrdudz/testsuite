@@ -17,6 +17,11 @@
 /*
   this test assumes:
   sizeof(long) == 4
+
+  CAUTION: the wraparound behaviour is actually undefined, to get the "expected"
+           behaviour with GCC, use -fwrapv or -fno-strict-overflow
+
+  see: https://gcc.gnu.org/wiki/FAQ#signed_overflow
 */
 
 #ifdef REFERENCE
@@ -36,29 +41,37 @@ long long0 = 0;
 
 #endif
 
+void print(void)
+{
+#if defined(REFERENCE) && defined(REFCC_SIZEOF_LONG_64BIT)
+    fprintf(outfile,"long0: %d\n", long0);
+#else
+    fprintf(outfile,"long0: %ld\n", long0);
+#endif
+}
+
 int main(void)
 {
     OPENTEST();
 
-    long0 = 0x7f000000;
+    long0 = 0x7f000000L;
     /* wrap around zero */
-    fprintf(outfile,"long0: %ld\n", long0);
-    long0 = long0 + 0x2000000;
-    //  fprintf(outfile,"long0: %ld\n", long0);
-    if(long0 != -0x7f000000) {
+    print();
+    long0 = long0 + 0x2000000L;
+    if(long0 != -0x7f000000L) {
         fprintf(outfile,"failed!\n");
     }
-    fprintf(outfile,"long0: %ld\n\n", long0);
+    print();
 
-    long0 = 0x7f000000;
+    long0 = 0x7f000000L;
     /* wrap around zero */
-    fprintf(outfile,"long0: %ld\n", long0);
-    long0 = long0 + 0x2000000;
-    fprintf(outfile,"long0: %ld\n", long0);
-    if(long0 != -0x7f000000) {
+    print();
+    long0 = long0 + 0x2000000L;
+    print();
+    if(long0 != -0x7f000000L) {
         fprintf(outfile,"failed!\n");
     }
-    fprintf(outfile,"long0: %ld\n", long0);
+    print();
 
     CLOSETEST();
 
