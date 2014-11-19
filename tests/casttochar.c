@@ -5,9 +5,6 @@
   !!LICENCE!!     PD
 */
 
-#include <stdio.h>
-#include <limits.h>
-
 #define OUTFILE  "casttochar.out"
 #define THISFILE "casttochar"
 

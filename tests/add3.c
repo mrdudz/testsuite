@@ -83,7 +83,7 @@ void done(char *name)
     failures = 0;
 }
 
-void add_char2char(void)
+void addchar2char(void)
 {
   if(char0 != 4)
     failures++;
@@ -111,10 +111,10 @@ void add_char2char(void)
     failures++;
 #endif
 
-    done("add_char2char");
+    done("addchar2char");
 }
 
-void add_compound_char(void)
+void addcompoundchar(void)
 {
   char0 = char1+5;
 
@@ -124,10 +124,10 @@ void add_compound_char(void)
   if((char0+char1) != 13)
     failures++;
 
-    done("add_compound_char");
+    done("addcompoundchar");
 }
 
-void add_int2int(void)
+void addint2int(void)
 {
   if(int0 != 4)
     failures++;
@@ -142,10 +142,10 @@ void add_int2int(void)
   if(int0 != -0x7ff8)
     failures++;
 
-    done("add_int2int");
+    done("addint2int");
 }
 
-void add_compound_int(void)
+void addcompoundint(void)
 {
   int0 = int1+5;
 
@@ -155,10 +155,10 @@ void add_compound_int(void)
   if((int0+int1) != 13)
     failures++;
 
-    done("add_compound_int");
+    done("addcompoundint");
 }
 
-void add_lit2long(void)
+void addlit2long(void)
 {
 
   if(long0 != 0)
@@ -204,10 +204,10 @@ void add_lit2long(void)
   if(long0 != 0)
     failures|=0x0100;
 
-    done("add_lit2long");
+    done("addlit2long");
 }
 
-void add_lit2ulong(void)
+void addlit2ulong(void)
 {
 
   if(ulong0 != 0)
@@ -249,7 +249,7 @@ void add_lit2ulong(void)
   if(ulong0)
     failures++;
 
-    done("add_lit2ulong");
+    done("addlit2ulong");
 }
 
 int main(void)
@@ -258,20 +258,20 @@ int main(void)
 
     char0=4;
     char1 = char0 + 1;
-    add_char2char();
+    addchar2char();
 
     char1=4;
-    add_compound_char();
+    addcompoundchar();
 
     int0 = 4;
     int1 = int0 + 1;
-    add_int2int();
+    addint2int();
 
     int1=4;
-    add_compound_int();
+    addcompoundint();
 
-    add_lit2long();
-    add_lit2ulong();
+    addlit2long();
+    addlit2ulong();
 
     CLOSETEST();
 

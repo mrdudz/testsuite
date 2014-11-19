@@ -47,7 +47,7 @@ done ()
  long0 == 0
  ulong0 == 0
 */
-void c_0(void)
+void c0(void)
 {
 
   if(long0 != 0)
@@ -69,7 +69,7 @@ void c_0(void)
  long1 == 1
  ulong1 == 1
 */
-void c_1(void)
+void c1(void)
 {
 
   if(long0 == 1)
@@ -105,7 +105,7 @@ void c_1(void)
  long0 == 2
  ulong0  == 2
 */
-void c_2(void)
+void c2(void)
 {
 
   if(long0 != 2)
@@ -127,7 +127,7 @@ void c_2(void)
  achar0 == 0xff
  aint0  == 0xff
 */
-void c_ff(void)
+void cff(void)
 {
 
   if(long0 != 0xff)
@@ -150,7 +150,7 @@ void c_ff(void)
  achar0 == 0x200
  aint0  == 0x200
 */
-void c_200(void)
+void c200(void)
 {
 
   if(long0 != 0x200)
@@ -175,7 +175,7 @@ void c_200(void)
  long1  != 0x20000
  ulong1 != 0x20000
 */
-void c_20000(void)
+void c20000(void)
 {
 
   if(long0 != 0x20000)
@@ -309,7 +309,7 @@ void c_ifelse1(void)
    assumes long0 = -1
    assumes long1 = 1
 */
-void c_minus1(void)
+void cminus1(void)
 {
   fprintf(outfile,"long0:%ld long1:%ld\n",long0,long1);
   
@@ -340,7 +340,7 @@ void c_minus1(void)
 /* assumes
  long0 = long1 = ulong0 = ulong1 == 0
 */
-void c_long2long_eq(void)
+void clong2longeq(void)
 {
 
   if(long0 != long1)
@@ -369,7 +369,7 @@ void c_long2long_eq(void)
  long0 = ulong0 == 0
  long1 = ulong1 == 1
 */
-void c_long2long_neq(void)
+void clong2longneq(void)
 {
 
   if(long0 == long1)
@@ -400,7 +400,7 @@ void c_long2long_neq(void)
   long1=-1000;
 */
 void
-c_long2neglit(void)
+clong2neglit(void)
 {
 
   if(long0>0)
@@ -428,47 +428,47 @@ main (void)
 	opentest(OUTFILE);
 
 
-  c_0();
-  fprintf(outfile,"c_0: %d\n",failures);
+  c0();
+  fprintf(outfile,"c0: %d\n",failures);
 
-  c_long2long_eq();
-  fprintf(outfile,"c_long2long_eq: %d\n",failures);
+  clong2longeq();
+  fprintf(outfile,"clong2longeq: %d\n",failures);
 
   long1 = 1;
   ulong1 = 1;
-  c_1();
-  fprintf(outfile,"c_1: %d\n",failures);
-  c_long2long_neq();
-  fprintf(outfile,"c_long2long_neq: %d\n",failures);
+  c1();
+  fprintf(outfile,"c1: %d\n",failures);
+  clong2longneq();
+  fprintf(outfile,"clong2longneq: %d\n",failures);
 
   long0 = 2;
   ulong0 = 2;
-  c_2();
-  fprintf(outfile,"c_2: %d\n",failures);
+  c2();
+  fprintf(outfile,"c2: %d\n",failures);
 
   long0 = 0xff;
   ulong0 = 0xff;
-  c_ff();
-  fprintf(outfile,"c_ff: %d\n",failures);
+  cff();
+  fprintf(outfile,"cff: %d\n",failures);
 
   long0 = 0x200;
   ulong0 = 0x200;
-  c_200();
-  fprintf(outfile,"c_200: %d\n",failures);
+  c200();
+  fprintf(outfile,"c200: %d\n",failures);
 
   long0 = 0x20000;
   ulong0 = 0x20000;
-  c_20000();
-  fprintf(outfile,"c_20000: %d\n",failures);
+  c20000();
+  fprintf(outfile,"c20000: %d\n",failures);
 
   long0 = -1;
-  c_minus1();
-  fprintf(outfile,"c_minus1: %d\n",failures);
+  cminus1();
+  fprintf(outfile,"cminus1: %d\n",failures);
 
   long0=-100;
   long1=-1000;
-  c_long2neglit();
-  fprintf(outfile,"c_long2neglit: %d\n",failures);
+  clong2neglit();
+  fprintf(outfile,"clong2neglit: %d\n",failures);
 
   success = failures;
   done ();

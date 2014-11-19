@@ -30,8 +30,12 @@ SIM65=$(DEVPREFIX)/sim65
 # 2.11.0 DOES support it
 CCFLAGS+=--standard $(TARGETSTD)
 
-# must set std include- and lib- path for 2.7.0
-#CCFLAGS+=-I $(DEVPREFIX)/include
+# FIXME: we must somehow get rid of this to make cc65 <= 2.13.3 work
+#        correctly without it being installed
+
+# must set include and lib- path
+CCFLAGS+=-I $(DEVPREFIX)/include
+
 # 2.7.0 doesnt know -L
 # 2.8.0 doesnt know -L
 # 2.11.0 DOES support it
@@ -41,4 +45,5 @@ LDFLAGS+=-L $(DEVPREFIX)/libsrc
 #TARGETLIBPATH=$(DEVPREFIX)/libsrc
 
 # 2.12.0 needs crt0 explicitly linked (this path must have / at the end)
+# recent git does NOT need it
 #CRT0PATH=$(DEVPREFIX)/libsrc/

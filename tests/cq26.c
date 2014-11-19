@@ -159,7 +159,7 @@ s26(struct defs *pd0) {
         fprintf(outfile,s2,pd0->fprec,"float");
         fprintf(outfile,s2,pd0->dprec,"double");
      #else
-        fprintf(outfile,"NO_FLOATS\n");
+        fprintf(outfile,"NO FLOATS\n");
      #endif
    }
 #endif

@@ -4,23 +4,22 @@
 
 #include "testsuite.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #ifdef __CC65__
-#include <conio.h>
+//#include <conio.h>
 extern unsigned char _filetype;
 #endif
 
 /*
 	globals needed when tests should load and execute the following test
 	- currently only used by c64 target
+
+	FIXME: get rid of this
 */
-#ifdef TARGET_C64
-static char mydirname[NAME_MAX+1]=".";
-static DIR *mydir;
-static struct dirent *mydirent;
-#endif
+//#ifdef TARGET_C64
+//static char mydirname[NAME_MAX+1]=".";
+//static DIR *mydir;
+//static struct dirent *mydirent;
+//#endif
 
 static FILE *outfile,*infile;
 
@@ -103,6 +102,7 @@ void closetest(char *name)
 */
 	
 #ifdef TARGET_C64
+#if 0
 	mydir=opendir(mydirname);
 	if(mydir==NULL)
 	{
@@ -164,10 +164,11 @@ void closetest(char *name)
 		} 
 		printf("all tests done.\n\r");
 		closedir(mydir);
+#endif
                 *((char*)2)=2;
                 ((void(*)())0x0002)();;
 //                asm("jmp $0002");     /* this doesnt work with older compilers ^_^ */
-	}
+//	}
 #else
 	name=name;
 #endif

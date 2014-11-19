@@ -251,8 +251,11 @@ export ASM2HTML="ca65html"
 #export TARGET=c64
 #export TARGETDEF=TARGET_C64
 
-export TARGET=run6502
-export TARGETDEF=TARGET_RUN6502
+#export TARGET=run6502
+#export TARGETDEF=TARGET_RUN6502
+
+export TARGET=sim65
+export TARGETDEF=TARGET_SIM65
 
 export TARGETCC=cc65
 

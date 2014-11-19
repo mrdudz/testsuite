@@ -26,9 +26,6 @@ STDLIBS=$(TARGETLIBPATH)/c64.lib
 
 ##############################################################################################
 
-#.SILENT:
-#			echo -n " cc:("$(TARGETSTD):$(CCFLAGS)")"; \
-
 %: %.c
 		-@echo -n "$< ..."; \
 		$(RM) $*.errors; \
@@ -43,7 +40,7 @@ STDLIBS=$(TARGETLIBPATH)/c64.lib
 				rm -f $* ;\
 			fi; \
 		fi; \
-        \
+	\
 		if test -e $*.s; then \
 			echo -n " as:"; \
 			if $(AS) -o $*.o $(ASFLAGS) $*.s 1>> $*.errors 2>> $*.errors; then \
@@ -54,7 +51,7 @@ STDLIBS=$(TARGETLIBPATH)/c64.lib
 				rm -f $* ;\
 			fi; \
 		fi; \
-        \
+	\
 		if test -e $*.o; then \
 			echo -n " ld:"; \
 			if $(LD) $(LDFLAGS) -o $* $(START) $*.o $(STDLIBS) 1>> $*.errors 2>> $*.errors; then \
@@ -64,24 +61,24 @@ STDLIBS=$(TARGETLIBPATH)/c64.lib
 				rm -f $* ;\
 			fi; \
 		fi; \
-        \
+	\
 		if test -e $*; then \
-            mv $* ./tbin/; \
+		mv $* ./tbin/; \
 			echo " (complete)"; \
 		else \
 			echo " (failed)"; \
 			rm -f ./tbin/$(@F) ;\
 		fi; \
-        \
+	\
 		mv $*.errors ./temp/
 
 disc:
 
 	@for i in $(TESTS) ; do \
-			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-			if test -e $$i.input; then \
-				cat $$i.input | $(CBMCVT) > ./tbin/$$THISTEST.in; \
-			fi; \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
+		if test -e $$i.input; then \
+			cat $$i.input | $(CBMCVT) > ./tbin/$$THISTEST.in; \
+		fi; \
 	done
 
 
@@ -90,25 +87,39 @@ run:
 
 	@rm -f ./tbin/*.out
 
+#	@cd ./tbin/; x64 -default -jamaction 5 -autostartprgmode 0 +confirmexit -refresh 10 +VICIIdsize +VICIIdscan -VICIIfilter 0 +sound +sidfilters -sidengine 0 -warp +autostart-handle-tde 8q \
+#		1> /dev/null 2> /dev/null
 
-	@cd ./tbin/; x64 -default -jamaction 5 -autostartprgmode 0 +confirmexit -refresh 10 +VICIIdsize +VICIIdscan -VICIIfilter 0 +sound +sidfilters -sidengine 0 -warp +autostart-handle-tde 8q \
-		1> /dev/null 2> /dev/null
+	@echo "using "´which x64´":"
+	@for i in $(TESTS) ; do \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'` ;\
+		echo -n "$$THISTEST," ;\
+		rm -f ./tbin/$$THISTEST.out ;\
+		if test -e ./tbin/$$THISTEST; then \
+			cd ./tbin/; \
+			x64 -console -default -jamaction 5 -autostartprgmode 0 -refresh 10 \
+				+VICIIdsize +VICIIdscan -VICIIfilter 0 +sound +sidfilters -sidengine 0 \
+				-warp +autostart-handle-tde -limitcycles 199999999 \
+				$$THISTEST 1> /dev/null 2> /dev/null ;\
+			cd .. ;\
+		fi;\
+	done
 
 
 extract:
-		@-$(CC) --version 2>&1 | grep -v "No input files" > ./temp/targetcc.version
-		@for i in $(TESTS) ; do \
-			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-			echo -n "$$THISTEST,"; \
-			rm -f ./temp/$$THISTEST.result; \
-			if test -e ./tbin/$$THISTEST.out; then \
-				cat ./tbin/$$THISTEST.out | $(PET2ASC) > ./temp/$$THISTEST.result; \
-			fi;\
-		done
+	@-$(CC) --version 2>&1 | grep -v "No input files" > ./temp/targetcc.version
+	@for i in $(TESTS) ; do \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
+		echo -n "$$THISTEST,"; \
+		rm -f ./temp/$$THISTEST.result; \
+		if test -e ./tbin/$$THISTEST.out; then \
+			cat ./tbin/$$THISTEST.out | $(PET2ASC) > ./temp/$$THISTEST.result; \
+		fi;\
+	done
 
 
 clean:
-		@for i in $(TESTS) ; do \
-			$(RM) $$i.o; \
-			$(RM) $$i.s; \
-		done
+	@for i in $(TESTS) ; do \
+		$(RM) $$i.o; \
+		$(RM) $$i.s; \
+	done

@@ -14,7 +14,7 @@
 main()
 {
 	opentest(OUTFILE);
-        fprintf(outfile,"NO_FLOATS\n\r");
+        fprintf(outfile,"NO FLOATS\n\r");
 	closetest(THISFILE);
 }
 

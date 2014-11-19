@@ -329,36 +329,36 @@ DIJKSTRA_NODE *g;
 
     fprintf(outfile,"----------------------\n");
 
-    fprintf(outfile,"Node    |");
+    fprintf(outfile,"Node    !");
     g=graph;while(g->EDGES!=NULL) {
-        fprintf(outfile,"-->%c<-|",g->TAG);
+        fprintf(outfile,"-->%c<-!",g->TAG);
         g++;
     }
     fprintf(outfile,"\n");
 
-    fprintf(outfile,"MinDist |");
+    fprintf(outfile,"MinDist !");
     g=graph;while(g->EDGES!=NULL) {
-        fprintf(outfile," %5u|",g->MINDIST);
+        fprintf(outfile," %5u!",g->MINDIST);
         g++;
     }
     fprintf(outfile,"\n");
 
-    fprintf(outfile,"Flag    |");
+    fprintf(outfile,"Flag    !");
     g=graph;while(g->EDGES!=NULL) {
         switch(g->FLAG){
 /*
             case DIJKSTRA_FLAG_OPEN:
-                fprintf(outfile,"opened|");
+                fprintf(outfile,"opened!");
                 break;
  */
             case DIJKSTRA_FLAG_CLOSED:
-                fprintf(outfile,"closed|");
+                fprintf(outfile,"closed!");
                 break;
             default:
                 if(g->MINDIST!=DIJKSTRA_INFINITY){
-                    fprintf(outfile,"opened|");
+                    fprintf(outfile,"opened!");
                 } else {
-                    fprintf(outfile,"------|");
+                    fprintf(outfile,"------!");
                 }
                 break;
         }
@@ -366,12 +366,12 @@ DIJKSTRA_NODE *g;
     }
     fprintf(outfile,"\n");
 
-    fprintf(outfile,"Previous|");
+    fprintf(outfile,"Previous!");
     g=graph;while(g->EDGES!=NULL) {
         if(g->PREVIOUS==NULL)
-            fprintf(outfile,"------|");
+            fprintf(outfile,"------!");
         else
-            fprintf(outfile,"  (%c) |",g->PREVIOUS->TAG);
+            fprintf(outfile,"  (%c) !",g->PREVIOUS->TAG);
         g++;
     }
     fprintf(outfile,"\n");

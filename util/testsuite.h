@@ -2,6 +2,26 @@
 #ifndef __TESTSUITE_H__
 #define __TESTSUITE_H__
 
+//#ifdef __CC65__
+///* have the prototypes here instead of including the lib so we dont have to
+//   worry about the right header being included
+// */
+///* stdlib.h */
+//void __fastcall__ exit (int ret);
+///* stdio.h */
+//typedef struct _FILE FILE;
+//extern FILE* stdin;
+//extern FILE* stdout;
+//FILE* __fastcall__ fopen (const char* name, const char* mode);
+//int __fastcall__ fclose (FILE* f);
+//int fprintf (FILE* f, const char* format, ...);
+//int printf (const char* format, ...);
+//#else
+/* for the reference compile we should use its proper headers */
+#include <stdio.h>
+#include <stdlib.h>
+//#endif
+
 /* get char from input */
 int GETCHAR(void);
 
@@ -45,7 +65,7 @@ extern void __fastcall__  run6502_logerror(unsigned char);
 #endif
 
 #ifdef TARGET_C64
-#include "c64/dirtest.c" /* needed by output.c */
+//#include "c64/dirtest.c" /* needed by output.c */
 #define LOG_ERROR(x)
 #endif
 

@@ -79,10 +79,10 @@ STDLIBS=run6502.lib
 
 disc:
 	@for i in $(TESTS) ; do \
-			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-			if test -e $$i.input; then \
-				cat $$i.input > ./tbin/$$THISTEST.in; \
-			fi; \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
+		if test -e $$i.input; then \
+			cat $$i.input > ./tbin/$$THISTEST.in; \
+		fi; \
 	done
 
 run:
@@ -90,7 +90,7 @@ run:
 	@echo "using $(RUN6502):"
 	@for i in $(TESTS) ; do \
 		export THISTEST=`echo "$$i" | sed -e 's/.*\///'` ;\
-		echo -n "$$THISTEST" ;\
+		echo -n "$$THISTEST," ;\
 		rm -f ./tbin/$$THISTEST.out ;\
 		if test -e ./tbin/$$THISTEST; then \
 			if test -e ./tbin/$$THISTEST.in; then \
@@ -105,21 +105,18 @@ run:
 
 
 extract:
-		@-$(CC) --version 2>&1 | grep -v "No input files" > ./temp/targetcc.version
-		@for i in $(TESTS) ; do \
-			export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
-			echo -n "$$THISTEST,"; \
-			rm -f ./temp/$$THISTEST.result; \
-			if test -e ./tbin/$$THISTEST.out; then \
-				cat ./tbin/$$THISTEST.out > ./temp/$$THISTEST.result; \
-			fi;\
-		done
-
-
-#				cat ./bin/$$THISTEST.out | $(CBMCVT) -f > ./temp/$$THISTEST.result; \
+	@-$(CC) --version 2>&1 | grep -v "No input files" > ./temp/targetcc.version
+	@for i in $(TESTS) ; do \
+		export THISTEST=`echo "$$i" | sed -e 's/.*\///'`; \
+		echo -n "$$THISTEST,"; \
+		rm -f ./temp/$$THISTEST.result; \
+		if test -e ./tbin/$$THISTEST.out; then \
+			cat ./tbin/$$THISTEST.out > ./temp/$$THISTEST.result; \
+		fi;\
+	done
 
 clean:
-		@for i in $(TESTS) ; do \
-			$(RM) $$i.o; \
-			$(RM) $$i.s; \
-		done
+	@for i in $(TESTS) ; do \
+		$(RM) $$i.o; \
+		$(RM) $$i.s; \
+	done
