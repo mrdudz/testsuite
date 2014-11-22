@@ -1,6 +1,6 @@
 
-TARGET=sim65
-#TARGET=run6502
+#TARGET=sim65
+TARGET=run6502
 # this will use VICE
 #TARGET=c64
 
@@ -9,12 +9,18 @@ TARGET=sim65
 all: opt
 #all: std
 
-.PHONY: attribs
+.PHONY: attribs run6502
 
 attribs:
 	@chmod 755 maketests
 	@chmod 755 makereport.sh
 	@chmod 755 maketable.sh
+
+run6502:
+# rebuild the run6502 lib to avoid version mismatch
+ifeq ($(TARGET),run6502)
+	@make -C ../run6502/cc65 clean all
+endif
 
 std: attribs
 	@./maketests --target $(TARGET) --standard cc65 --show-config --reference
@@ -35,14 +41,7 @@ std: attribs
 
 	@./maketests --target $(TARGET) --show-config --overview
 
-one: attribs
-	@./maketests --target $(TARGET) --standard cc65 --show-config --reference
-
-	@./maketests --target $(TARGET) --standard cc65 --show-config --targetprogs --run --report
-
-	@./maketests --target $(TARGET) --show-config --overview
-
-opt: attribs
+opt: attribs run6502
 	@./maketests --target $(TARGET) --standard cc65 --show-config --reference
 
 	@./maketests --target $(TARGET) --standard cc65 --show-config --targetprogs --run --report
