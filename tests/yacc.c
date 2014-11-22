@@ -435,13 +435,25 @@ yylook()
 			yyt = yystate->yystoff;
 
 /*			fprintf(yyout,"yylook:   yyt offs: %02x\n",yyt-yycrank); */
-
 			
-			if(yyt == yycrank)
-			{		/* may not be any transitions */
+			if(yyt == yycrank) {
+# ifdef LEXDEBUG
+                                fprintf(yyout,"yylook:   yyt == yycrank\n");
+# endif
+                                /* may not be any transitions */
 				yyz = yystate->yyother;
-				if(yyz == 0)break;
-				if(yyz->yystoff == yycrank)break;
+				if(yyz == 0) {
+# ifdef LEXDEBUG
+                                    fprintf(yyout,"yylook:   yyz == 0\n");
+# endif
+                                    break;
+                                }
+				if(yyz->yystoff == yycrank) {
+# ifdef LEXDEBUG
+                                    fprintf(yyout,"yylook:   yyz->yystoff == yycrank\n");
+# endif
+                                    break;
+                                }
 			}
 			*yylastch++ = yych = input();
 
